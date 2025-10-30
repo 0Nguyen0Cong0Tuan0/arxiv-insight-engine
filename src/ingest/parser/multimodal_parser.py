@@ -2,7 +2,7 @@ from pathlib import Path
 from unstructured.partition.pdf import partition_pdf
 from typing import List
 
-def extract_with_unstructured(pdf_path: str) -> List[List]:
+def extract_with_pdf(pdf_path: str) -> List[List]:
     """
     Extracts text, tables, figures from PDF using unstructured.
     Returns dict with raw elements + HF-summarized versions.
