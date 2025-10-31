@@ -14,7 +14,7 @@ def run_pipeline():
 
     pdf_paths = download_arxiv_papers(
         query=settings.QUERY,
-        max_docs=5,
+        max_docs=1,
         save_dir=settings.RAW_PAPERS_DIR
     )
 
@@ -25,6 +25,10 @@ def run_pipeline():
         chunks = process_pdf(pdf_path, paper_id)
         all_chunks.extend(chunks)
 
-    logger.info(f"Upserting {len(all_chunks)} chunks...")
-    upsert_chunks(all_chunks)
+    if all_chunks:
+        logger.info(f"Upserting {len(all_chunks)} chunks...")
+        upsert_chunks(all_chunks)
+    else:
+        logger.warning("No chunks were extracted from the PDFs. Nothing to upsert.")
+        
     logger.info("Pipeline complete!")

@@ -4,6 +4,8 @@ from src.ingest.tools.image_captioner import ImageCaptioner
 from src.ingest.models.document import DocumentChunk, ChunkType
 from uuid import uuid4
 
+from config import TextCategory
+
 def process_pdf(pdf_path: str, paper_id: str):
     """
     Processes a PDF file to extract text, tables, and figures,
@@ -35,26 +37,55 @@ def process_pdf(pdf_path: str, paper_id: str):
     # Build chunks
     chunks = []
     img_idx = 0
-    for i, elem in enumerate(elements):
-        chunk_id = f"{paper_id}_{i}"
-        if "NarrativeText" in str(type(elem)):
-            if raw_texts:
+
+    TEXT_CATEGORIES = {
+        TextCategory.NARRATIVE_TEXT,
+        TextCategory.TITLE,
+        TextCategory.TEXT,
+        TextCategory.LIST_ITEM,
+        TextCategory.ABSTRACT,
+        TextCategory.UNCATEGORIZED,
+        TextCategory.FIGURECAPTION,
+        TextCategory.FORMULA,
+        TextCategory.CODESNIPPET
+    }
+    
+    for i, composite_elem in enumerate(elements):
+        try:
+            orig_elements = composite_elem.metadata.orig_elements
+            if not isinstance(orig_elements, list):
+                continue
+        except AttributeError:
+            continue
+
+        for j, elem in enumerate(orig_elements):
+            chunk_id = f"{paper_id}_{i}_{j}" 
+            
+            category = getattr(elem, "category", "")
+
+            if category in TEXT_CATEGORIES:
                 chunks.append(DocumentChunk(
                     paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.TEXT,
-                    content=elem.text, summary=text_summaries.pop(0) if text_summaries else ""
+                    content=getattr(elem, "text", ""), 
+                    summary=text_summaries.pop(0) if text_summaries else ""
                 ))
-        elif "Table" in str(type(elem)):
-            chunks.append(DocumentChunk(
-                paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.TABLE,
-                content=elem.text, summary=table_summaries.pop(0) if table_summaries else "",
-                metadata={"html": elem.metadata.text_as_html or ""}
-            ))
-        elif "Image" in str(type(elem)):
-            if img_idx < len(image_captions):
+            
+            elif category == "Table":
                 chunks.append(DocumentChunk(
-                    paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.FIGURE,
-                    content="", caption=image_captions[img_idx],
-                    image_path=f"{paper_id}_fig_{img_idx}.png"
+                    paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.TABLE,
+                    content=getattr(elem, "text", ""), 
+                    summary=table_summaries.pop(0) if table_summaries else "",
+                    metadata={"html": getattr(elem.metadata, "text_as_html", "") or ""}
                 ))
-                img_idx += 1
+
+            elif category == "Image":
+                if img_idx < len(image_captions):
+                    chunks.append(DocumentChunk(
+                        paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.FIGURE,
+                        content="",
+                        caption=image_captions[img_idx],
+                        image_path=f"{paper_id}_fig_{img_idx}.png"
+                    ))
+                    img_idx += 1
+    
     return chunks
