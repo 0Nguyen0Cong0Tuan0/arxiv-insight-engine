@@ -1,6 +1,6 @@
 from src.ingest.parser.multimodal_parser import parse_pdf
-from src.ingest.tools.summarizer import Summarizer
-from src.ingest.tools.image_captioner import ImageCaptioner
+# from src.ingest.tools.summarizer import Summarizer
+# from src.ingest.tools.image_captioner import ImageCaptioner
 from src.ingest.models.document import DocumentChunk, ChunkType
 from uuid import uuid4
 
@@ -18,21 +18,22 @@ def process_pdf(pdf_path: str, paper_id: str):
     Returns:
         List of DocumentChunk objects.
     """
-    elements, texts, tables = parse_pdf(pdf_path)
+    # elements, texts, tables = parse_pdf(pdf_path)
+    elements = parse_pdf(pdf_path)
 
-    summarizer = Summarizer()
-    captioner = ImageCaptioner()
+    # summarizer = Summarizer()
+    # captioner = ImageCaptioner()
 
     # Extract images
-    all_images_b64 = captioner.extract_base64_images(elements)
-    image_captions = captioner.caption_images(all_images_b64)
+    # all_images_b64 = captioner.extract_base64_images(elements)
+    # image_captions = captioner.caption_images(all_images_b64)
 
     # Summarize texts and tables
-    raw_texts = [getattr(t, "text", "").strip() for t in texts if getattr(t, "text", "").strip()]
-    raw_htmls = [getattr(t.metadata, "text_as_html", "").strip() for t in tables if hasattr(t.metadata, "text_as_html")]
+    # raw_texts = [getattr(t, "text", "").strip() for t in texts if getattr(t, "text", "").strip()]
+    # raw_htmls = [getattr(t.metadata, "text_as_html", "").strip() for t in tables if hasattr(t.metadata, "text_as_html")]
 
-    text_summaries = summarizer.summarize_texts(raw_texts)
-    table_summaries = summarizer.summarize_texts(raw_htmls)
+    # text_summaries = summarizer.summarize_texts(raw_texts)
+    # table_summaries = summarizer.summarize_texts(raw_htmls)
 
     # Build chunks
     chunks = []
@@ -67,25 +68,25 @@ def process_pdf(pdf_path: str, paper_id: str):
                 chunks.append(DocumentChunk(
                     paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.TEXT,
                     content=getattr(elem, "text", ""), 
-                    summary=text_summaries.pop(0) if text_summaries else ""
+                    # summary=text_summaries.pop(0) if text_summaries else ""
                 ))
             
             elif category == "Table":
                 chunks.append(DocumentChunk(
                     paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.TABLE,
                     content=getattr(elem, "text", ""), 
-                    summary=table_summaries.pop(0) if table_summaries else "",
+                    # summary=table_summaries.pop(0) if table_summaries else "",
                     metadata={"html": getattr(elem.metadata, "text_as_html", "") or ""}
                 ))
 
             elif category == "Image":
-                if img_idx < len(image_captions):
-                    chunks.append(DocumentChunk(
-                        paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.FIGURE,
-                        content="",
-                        caption=image_captions[img_idx],
-                        image_path=f"{paper_id}_fig_{img_idx}.png"
-                    ))
-                    img_idx += 1
+                # if img_idx < len(image_captions):
+                chunks.append(DocumentChunk(
+                    paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.FIGURE,
+                    content="",
+                    # caption=image_captions[img_idx],
+                    image_path=f"{paper_id}_fig_{img_idx}.png"
+                ))
+                # img_idx += 1
     
     return chunks

@@ -32,8 +32,8 @@ def parse_pdf(pdf_path: str) -> Tuple[List, List, List]:
         size={'longest_edge': 2048}
     )
 
-    texts = [e for e in elements if "CompositeElement" in str(type(e))]
-    tables = [e for e in elements if "Table" in str(type(e))]
+    # texts = [e for e in elements if "CompositeElement" in str(type(e))]
+    # tables = [e for e in elements if "Table" in str(type(e))]
 
-    assert len(elements) == len(tables) + len(texts), "Some elements were neither text nor table."
-    return elements, texts, tables
+    # assert len(elements) == len(tables) + len(texts), "Some elements were neither text nor table."
+    return elements # , texts, tables
