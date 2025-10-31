@@ -35,6 +35,9 @@ def download_arxiv_papers(query: str, max_docs: int = settings.MAX_PAPERS, save_
         filename = f"{result.entry_id.split('/')[-1]}.pdf"
         pdf_url = result.pdf_url
         pdf_path = str(save_dir / filename)
+        
+        pdf_paths.append(pdf_path)
+        print(pdf_paths)
 
         if pdf_url and not Path(pdf_path).exists():
             try:
@@ -42,7 +45,7 @@ def download_arxiv_papers(query: str, max_docs: int = settings.MAX_PAPERS, save_
                 response.raise_for_status()
                 Path(pdf_path).write_bytes(response.content)
                 print(f"Downloaded: {pdf_path}")
-                pdf_paths.append(pdf_path)
+                # pdf_paths.append(pdf_path)
             except requests.RequestException as e:
                 print(f"Failed to download {pdf_url}: {e}")
                 continue

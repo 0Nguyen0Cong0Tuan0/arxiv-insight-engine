@@ -18,6 +18,8 @@ def run_pipeline():
         save_dir=settings.RAW_PAPERS_DIR
     )
 
+    print(pdf_paths)
+
     all_chunks = []
     for pdf_path in pdf_paths:
         paper_id = Path(pdf_path).stem
