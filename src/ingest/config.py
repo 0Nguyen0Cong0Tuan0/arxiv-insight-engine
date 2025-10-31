@@ -1,6 +1,6 @@
 from pathlib import Path
-from pydantic import BaseSettings
-from typing import Literal
+from pydantic_settings import BaseSettings
+from typing import Literal, Optional
 
 class Settings(BaseSettings):
     """
@@ -25,6 +25,14 @@ class Settings(BaseSettings):
 
     MAX_PAPERS: int = 1000
     QUERY: str = "LLM agents"
+
+    # API KEYS
+    OPENAI_API_KEY: Optional[str] = None
+    HUGGINGFACEHUB_API_TOKEN: Optional[str] = None
+    GOOGLE_API_KEY: Optional[str] = None
+    GROQ_API_KEY: Optional[str] = None
+    LANGCHAIN_API_KEY: Optional[str] = None
+    LANGCHAIN_TRACING_V2: bool = False
 
     class Config:
         env_file = ".env"
