@@ -7,8 +7,8 @@ class Settings(BaseSettings):
     Configuration settings for the ingestion process.
     """
     # Paths
-    RAW_PAPERS_DIR: Path = Path("data/raw_papers")
-    PROCESSED_DIR: Path = Path("data/processed")
+    RAW_PAPERS_DIR: Path = Path("../../data/raw_papers")
+    PROCESSED_DIR: Path = Path("../../data/processed")
     QDRANT_URL: str = "http://localhost:6333"
     QDRANT_COLLECTION: str = "arxiv_multimodal"
 
@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     BASE_MAX: int = 200
     BASE_MIN: int = 30
 
-    MAX_PAPERS: int = 1000
+    MAX_PAPERS: int = 10
     QUERY: str = "LLM agents"
 
     # API KEYS

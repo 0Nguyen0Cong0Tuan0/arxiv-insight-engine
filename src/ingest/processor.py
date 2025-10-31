@@ -57,4 +57,4 @@ def process_pdf(pdf_path: str, paper_id: str):
                     image_path=f"{paper_id}_fig_{img_idx}.png"
                 ))
                 img_idx += 1
-    return chunkss
+    return chunks

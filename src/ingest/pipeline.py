@@ -3,6 +3,7 @@ from src.ingest.processor import process_pdf
 from src.ingest.vector_store import init_collection, upsert_chunks
 from src.ingest.config import settings
 import logging
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,7 +14,7 @@ def run_pipeline():
 
     pdf_paths = download_arxiv_papers(
         query=settings.QUERY,
-        max_docs=settings.MAX_PAPERS,
+        max_docs=5,
         save_dir=settings.RAW_PAPERS_DIR
     )
 
