@@ -1,7 +1,7 @@
 import torch
 from typing import List, Dict, Optional
 from transformers import pipeline
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from threading import Lock #  for thread safety
 
 from src.ingest.config import settings
