@@ -1,5 +1,6 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings
+from enum import Enum
 from typing import Literal, Optional
 
 class Settings(BaseSettings):
@@ -39,3 +40,14 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
 
 settings = Settings()
+
+class TextCategory(str, Enum):
+    NARRATIVE_TEXT = "NarrativeText"
+    TITLE = "Title"
+    TEXT = "Text"
+    LIST_ITEM = "ListItem"
+    ABSTRACT = "Abstract"
+    UNCATEGORIZED = "UncategorizedText"
+    FIGURECAPTION = "FigureCaption"
+    FORMULA = "Formula"
+    CODESNIPPET = "CodeSnippet"
