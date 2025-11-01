@@ -1,10 +1,13 @@
+import sys
 import arxiv
 import requests
 import urllib3
 from pathlib import Path
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-from src.ingest.config import settings
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+sys.path.append(str(PROJECT_ROOT))
+from config import settings
 
 def download_arxiv_papers(query: str, max_docs: int = settings.MAX_PAPERS, save_dir: Path = settings.RAW_PAPERS_DIR):
     """
@@ -37,7 +40,6 @@ def download_arxiv_papers(query: str, max_docs: int = settings.MAX_PAPERS, save_
         pdf_path = str(save_dir / filename)
         
         pdf_paths.append(pdf_path)
-        print(pdf_paths)
 
         if pdf_url and not Path(pdf_path).exists():
             try:

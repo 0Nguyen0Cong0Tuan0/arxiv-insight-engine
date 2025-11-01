@@ -1,7 +1,7 @@
-from src.agents.tools.hybrid_retriever import get_hybrid_retriever
-from langchain.messages import AIMessage
+from src.agents.tools.hybrid_retriever import EnsembleRetriever
+from langchain_core.messages import AIMessage
 
-retriever = get_hybrid_retriever()
+retriever = EnsembleRetriever([]).get_hybrid_retriever()
 
 def retrieve(state):
     """

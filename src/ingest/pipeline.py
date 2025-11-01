@@ -1,9 +1,14 @@
-from src.ingest.loader.arxiv_loader import download_arxiv_papers
-from src.ingest.processor import process_pdf
-from src.ingest.vector_store import init_collection, upsert_chunks
-from src.ingest.config import settings
-import logging
+from loader.arxiv_loader import download_arxiv_papers
+from processor import process_pdf
+from config import settings
 from pathlib import Path
+import logging
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.append(str(PROJECT_ROOT))
+
+from stores.vector_store import init_collection, upsert_chunks
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,11 +19,9 @@ def run_pipeline():
 
     pdf_paths = download_arxiv_papers(
         query=settings.QUERY,
-        max_docs=1,
+        max_docs=5,
         save_dir=settings.RAW_PAPERS_DIR
     )
-
-    print(pdf_paths)
 
     all_chunks = []
     for pdf_path in pdf_paths:
