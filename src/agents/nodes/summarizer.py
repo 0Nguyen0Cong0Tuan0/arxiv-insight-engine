@@ -1,5 +1,5 @@
-from src.ingest.tools.summarizer import Summarizer
-from langchain.messages import AIMessage
+from src.agents.tools.summarizer import Summarizer
+from langchain_core.messages import AIMessage
 
 summarizer = Summarizer()
 

@@ -1,7 +1,7 @@
-from src.ingest.tools.image_captioner import ImageCaptioner
-from langchain.messages import AIMessage
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+from langchain_core.messages import AIMessage
+from langchain_core.prompts import ChatPromptTemplate
+from src.agents.tools.image_captioner import ImageCaptioner
 
 captioner = ImageCaptioner()
 llm = ChatOpenAI(model="gpt-4o-mini")

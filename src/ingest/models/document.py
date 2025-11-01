@@ -18,9 +18,6 @@ class DocumentChunk(BaseModel):
     chunk_id: str
     type: ChunkType
     content: str
-    # summary: Optional[str] = None
-    # caption: Optional[str] = None
-    image_paths: Optional[str] = None
     metadata: dict = {}
 
     def to_qdrant_payload(self, vector: List[float]) -> dict:
@@ -38,8 +35,5 @@ class DocumentChunk(BaseModel):
             "chunk_id": self.chunk_id,
             "type": self.type.value,
             "content": self.content,
-            # "summary": self.summary,
-            # "caption": self.caption,
-            "image_paths": self.image_paths,
             **self.metadata
         }, vector
