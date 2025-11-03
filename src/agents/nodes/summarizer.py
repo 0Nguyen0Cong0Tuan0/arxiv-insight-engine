@@ -12,8 +12,10 @@ def summarize(state):
     Returns:
         dict: A dictionary with summaries and messages.
     """
-    chunks = state["retrieved_chunks"]
-    texts = [c.page_content for c in chunks if c.metadata.get("type") == "text"]
+    print(state)
+    chunks = state["retrieved_chunks"]["docs"]
+    print(chunks)
+    texts = [c.page_content for c in chunks]
     summaries = summarizer.summarize_texts(texts)
     return {
         "summaries": summaries,

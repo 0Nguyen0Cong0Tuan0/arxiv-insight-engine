@@ -1,0 +1,27 @@
+import os
+from dotenv import load_dotenv
+
+# Load environment FIRST
+load_dotenv()
+
+# Verify it worked
+if not os.getenv("OPENAI_API_KEY"):
+    print("ERROR: OPENAI_API_KEY not loaded!")
+    exit(1)
+
+import uvicorn
+from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+sys.path.append(str(PROJECT_ROOT))
+
+if __name__ == "__main__":
+    print(f"✓ OpenAI key loaded: {os.getenv('OPENAI_API_KEY')[:20]}...")
+    uvicorn.run(
+        "src.app.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info"
+    )

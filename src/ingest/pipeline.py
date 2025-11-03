@@ -1,21 +1,38 @@
-from loader.arxiv_loader import download_arxiv_papers
-from processor import process_pdf
-from config import settings
-from pathlib import Path
 import logging
-import sys
+from pathlib import Path
+from config import settings
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-sys.path.append(str(PROJECT_ROOT))
-
-from stores.vector_store import init_collection, upsert_chunks
+from src.ingest.processor import process_pdf
+from src.stores.vector_store import upsert_chunks
+from src.ingest.loader.arxiv_loader import download_arxiv_papers
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+async def process_single_pdf(pdf_path: str, paper_id: str) -> int:
+    """
+    Process a single PDF file asynchronously.
+    
+    Args:
+        pdf_path (str): Path to the PDF file.
+        paper_id (str): Identifier for the paper.
+    
+    Returns:
+        int: Number of chunks processed.
+    """
+    logger.info(f"Processing {paper_id}...")
+    chunks = process_pdf(pdf_path, paper_id)
+    
+    if chunks:
+        logger.info(f"Upserting {len(chunks)} chunks...")
+        upsert_chunks(chunks)
+        return len(chunks)
+    else:
+        logger.warning(f"No chunks extracted from {paper_id}")
+        return 0
+
 def run_pipeline():
     logger.info("Starting pipeline...")
-    init_collection()
 
     pdf_paths = download_arxiv_papers(
         query=settings.QUERY,

@@ -1,6 +1,7 @@
 from src.agents.tools.hybrid_retriever import EnsembleRetriever
 from langchain_core.messages import AIMessage
 
+# Initialize with a proper corpus fetch
 retriever = EnsembleRetriever([]).get_hybrid_retriever()
 
 def retrieve(state):
@@ -13,8 +14,8 @@ def retrieve(state):
         dict: A dictionary containing the retrieved chunks and a message.
     """
     query = state["query"]
-    docs = retriever.invoke(query)
+    docs = retriever.retrieve(query)  # Use retrieve method
     return {
-        "retrieved_chunks": docs,
+        "retrieved_chunks": docs,  # Fixed key to match state
         "messages": [AIMessage(content=f"Retrieved {len(docs)} chunks.")]
     }
