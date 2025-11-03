@@ -1,11 +1,12 @@
-from parser.multimodal_parser import parse_pdf
-from models.document import DocumentChunk, ChunkType
 import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.append(str(PROJECT_ROOT))
+
 from config import TextCategory
+from src.ingest.parser.multimodal_parser import parse_pdf
+from src.models.document import DocumentChunk, ChunkType
 
 def process_pdf(pdf_path: str, paper_id: str):
     """

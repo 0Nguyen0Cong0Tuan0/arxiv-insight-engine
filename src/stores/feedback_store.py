@@ -1,36 +1,76 @@
-from qdrant_client import QdrantClient
-from qdrant_client.http.models import VectorParams, Distance, PointStruct
+import chromadb
+from chromadb.config import Settings as ChromaSettings
 from src.embeddings.embedder import embed_text
 from config import settings
-from uuid import uuid4
 import logging
+from uuid import uuid4
 
-client = QdrantClient(url=settings.QDRANT_URL)
 logger = logging.getLogger(__name__)
 
+# Use the same client as vector_store
+chroma_client = chromadb.PersistentClient(
+    path=settings.CHROMA_PERSIST_DIR,
+    settings=ChromaSettings(
+        anonymized_telemetry=False,
+        allow_reset=True
+    )
+)
+
 def init_feedback():
-    if not client.collection_exists(collection_name=settings.QDRANT_FEEDBACK):
-        client.create_collection(
-            collection_name=settings.QDRANT_FEEDBACK,
-            vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+    """
+    Initialize or get the feedback collection in ChromaDB.
+    """
+    try:
+        collection = chroma_client.get_collection(name=settings.FEEDBACK_COLLECTION)
+        logger.info(f"Feedback collection '{settings.FEEDBACK_COLLECTION}' already exists.")
+    except Exception:
+        collection = chroma_client.create_collection(
+            name=settings.FEEDBACK_COLLECTION,
+            metadata={"hnsw:space": "cosine"}
         )
+        logger.info(f"Created feedback collection '{settings.FEEDBACK_COLLECTION}'.")
+    return collection
 
 def store_feedback(query: str, correction: str):
     """
-    Stores user feedback in the Qdrant collection.
+    Stores user feedback in the ChromaDB collection.
 
     Args:
         query (str): The original query string.
         correction (str): The user's correction or feedback.
     """
+    collection = chroma_client.get_collection(name=settings.FEEDBACK_COLLECTION)
     vector = embed_text(query)
-    points = PointStruct(
-        id=str(uuid4()),
-        vector=vector,
-        payload={"correction": correction}
+    
+    feedback_id = str(uuid4())
+    
+    collection.add(
+        ids=[feedback_id],
+        embeddings=[vector],
+        documents=[query],
+        metadatas=[{"correction": correction}]
     )
-    client.upsert(
-        collection_name=settings.QDRANT_FEEDBACK,
-        points=points,
-        wait=True
+    
+    logger.info(f"Stored feedback for query: {query[:50]}...")
+
+def get_feedback(query: str, n_results: int = 5):
+    """
+    Retrieve similar feedback for a given query.
+    
+    Args:
+        query (str): The query to search for.
+        n_results (int): Number of similar feedback items to return.
+    
+    Returns:
+        dict: Similar feedback from the collection.
+    """
+    collection = chroma_client.get_collection(name=settings.FEEDBACK_COLLECTION)
+    vector = embed_text(query)
+    
+    results = collection.query(
+        query_embeddings=[vector],
+        n_results=n_results,
+        include=["documents", "metadatas", "distances"]
     )
+    
+    return results
