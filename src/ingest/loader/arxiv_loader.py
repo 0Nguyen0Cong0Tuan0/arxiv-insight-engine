@@ -51,6 +51,53 @@ def search_arxiv_papers(query: str, max_results: int = settings.MAX_PAPERS):
     
     return results
 
+def download_single_arxiv_paper(paper_id: str, save_dir: Path = settings.RAW_PAPERS_DIR):
+    """
+    Download a single ArXiv paper by ID.
+    
+    Args:
+        paper_id (str): The ArXiv paper ID (with or without version).
+        save_dir (Path): Directory to save the downloaded paper.
+    
+    Returns:
+        str: Path to downloaded PDF, or None if failed.
+    """
+    save_dir.mkdir(parents=True, exist_ok=True)
+    
+    if 'v' in paper_id:
+        paper_id_base = paper_id.split('v')[0]
+    else:
+        paper_id_base = paper_id
+    
+    client = arxiv.Client()
+    search = arxiv.Search(
+        query=f"id:{paper_id_base}",
+        max_results=1,
+    )
+    
+    try:
+        result = next(client.results(search))
+        filename = f"{paper_id}.pdf"
+        pdf_path = save_dir / filename
+        
+        if not pdf_path.exists():
+            print(f"Downloading {paper_id} from {result.pdf_url}...")
+            response = requests.get(result.pdf_url, verify=False, timeout=30)
+            response.raise_for_status()
+            pdf_path.write_bytes(response.content)
+            print(f"Downloaded: {pdf_path}")
+        else:
+            print(f"Already exists: {pdf_path}")
+        
+        return str(pdf_path)
+        
+    except StopIteration:
+        print(f"Paper not found: {paper_id}")
+        return None
+    except Exception as e:
+        print(f"Error downloading {paper_id}: {e}")
+        return None
+    
 def download_arxiv_papers(query: str, max_docs: int = settings.MAX_PAPERS, save_dir: Path = settings.RAW_PAPERS_DIR):
     """
     Downloads arXiv papers as PDF + metadata. Saves them to the specified directory.
@@ -101,50 +148,3 @@ def download_arxiv_papers(query: str, max_docs: int = settings.MAX_PAPERS, save_
             print(f"Already exists: {pdf_path}")
     
     return pdf_paths
-
-def download_single_arxiv_paper(paper_id: str, save_dir: Path = settings.RAW_PAPERS_DIR):
-    """
-    Download a single ArXiv paper by ID.
-    
-    Args:
-        paper_id (str): The ArXiv paper ID (with or without version).
-        save_dir (Path): Directory to save the downloaded paper.
-    
-    Returns:
-        str: Path to downloaded PDF, or None if failed.
-    """
-    save_dir.mkdir(parents=True, exist_ok=True)
-    
-    if 'v' in paper_id:
-        paper_id_base = paper_id.split('v')[0]
-    else:
-        paper_id_base = paper_id
-    
-    client = arxiv.Client()
-    search = arxiv.Search(
-        query=f"id:{paper_id_base}",
-        max_results=1,
-    )
-    
-    try:
-        result = next(client.results(search))
-        filename = f"{paper_id}.pdf"
-        pdf_path = save_dir / filename
-        
-        if not pdf_path.exists():
-            print(f"Downloading {paper_id} from {result.pdf_url}...")
-            response = requests.get(result.pdf_url, verify=False, timeout=30)
-            response.raise_for_status()
-            pdf_path.write_bytes(response.content)
-            print(f"Downloaded: {pdf_path}")
-        else:
-            print(f"Already exists: {pdf_path}")
-        
-        return str(pdf_path)
-        
-    except StopIteration:
-        print(f"Paper not found: {paper_id}")
-        return None
-    except Exception as e:
-        print(f"Error downloading {paper_id}: {e}")
-        return None

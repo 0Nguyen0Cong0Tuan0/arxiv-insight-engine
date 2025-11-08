@@ -3,21 +3,30 @@ from langchain_core.messages import AIMessage
 
 summarizer = Summarizer()
 
-def summarize(state):
+def summarize_node(state):
     """
-    Summarize the retrieved text chunks.
-
-    Args:
-        state (dict): The current state containing retrieved chunks.
-    Returns:
-        dict: A dictionary with summaries and messages.
+    Summarize the retrieved text chunks or generate a summary answer.
     """
-    print(state)
-    chunks = state["retrieved_chunks"]["docs"]
-    print(chunks)
-    texts = [c.page_content for c in chunks]
-    summaries = summarizer.summarize_texts(texts)
+    chunks = state.get("retrieved_chunks", [])
+    
+    if not chunks:
+        return {
+            "synthesis": "No documents found to summarize.",
+            "summaries": [],
+            "messages": [AIMessage(content="No documents to summarize.")]
+        }
+    
+    # Extract text content
+    texts = [c.page_content for c in chunks if c.page_content]
+    
+    # Summarize
+    summaries = summarizer.summarize_texts(texts[:5])  # Limit to top 5
+    
+    # Combine summaries
+    combined = "\n\n".join(summaries)
+    
     return {
         "summaries": summaries,
+        "synthesis": f"Summary of retrieved papers:\n\n{combined}",
         "messages": [AIMessage(content=f"Summarized {len(summaries)} sections.")]
     }
