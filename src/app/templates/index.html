@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArXiv Insight Engine</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/static/css/variables.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/animations.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i data-lucide="brain-circuit" stroke-width="2" color="white" size="28"></i>
+                    </div>
+                    <div>
+                        <h1>ArXiv Insight Engine</h1>
+                        <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">
+                            AI-Powered Research Assistant
+                        </p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="papersCount">0</div>
+                        <div class="stat-label">Papers Indexed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="chunksCount">0</div>
+                        <div class="stat-label">Chunks Stored</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="upload">
+                        <i data-lucide="upload" size="18"></i>
+                        Upload
+                    </button>
+                    <button class="tab-btn" data-tab="search">
+                        <i data-lucide="search" size="18"></i>
+                        Search
+                    </button>
+                </div>
+
+                <!-- Upload Tab -->
+                <div id="uploadTab" class="tab-content active">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i data-lucide="file-text" size="32" color="white"></i>
+                        </div>
+                        <h3 style="margin-bottom: 8px;">Drop PDF files here</h3>
+                        <p style="color: var(--text-secondary); font-size: 14px;">
+                            or click to browse
+                        </p>
+                        <input type="file" id="fileInput" accept=".pdf" multiple style="display: none;">
+                    </div>
+                    <button class="btn btn-primary" id="uploadBtn" disabled>
+                        <i data-lucide="upload-cloud" size="20"></i>
+                        Upload & Process
+                    </button>
+                </div>
+
+                <!-- Search Tab -->
+                <div id="searchTab" class="tab-content">
+                    <div class="search-box">
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            id="arxivSearch" 
+                            placeholder="Search ArXiv (e.g., Machine Learning)"
+                        >
+                        <button class="search-btn" id="searchButton">
+                            <i data-lucide="search" size="18"></i>
+                        </button>
+                    </div>
+                    <div class="arxiv-results" id="arxivResults">
+                        <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+                            <i data-lucide="book-open" size="48" style="margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p>Search ArXiv papers to get started</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="ingestBtn" disabled>
+                        <i data-lucide="database" size="20"></i>
+                        Ingest Selected Papers
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <main class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i data-lucide="sparkles" size="64" color="white"></i>
+                        </div>
+                        <h2 class="empty-title">Ready to explore research papers</h2>
+                        <p class="empty-subtitle">
+                            Upload PDFs or search ArXiv to begin. Then ask questions or upload images to analyze your research.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea 
+                            class="chat-input" 
+                            id="messageInput" 
+                            placeholder="Ask anything about your papers..."
+                            rows="1"
+                        ></textarea>
+                        <div class="input-actions">
+                            <button class="icon-btn" id="imageUploadBtn">
+                                <i data-lucide="image" size="20"></i>
+                            </button>
+                            <button class="icon-btn send-btn" id="sendBtn">
+                                <i data-lucide="send" size="20"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="/static/js/state.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/upload.js"></script>
+    <script src="/static/js/search.js"></script>
+    <script src="/static/js/chat.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
