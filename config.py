@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
     SUMMARIZER_MODEL: str = "facebook/bart-large-cnn"
     CAPTIONER_MODEL: str = "Salesforce/blip-image-captioning-large"
+    LLM_MODEL: str = "meta-llama/Llama-3.3-70B-Instruct"
+    LLM_TASK: str = "text-generation"
+    LLM_MAX_NEW_TOKENS: int = 8192
 
     # SUMMARIZATION PARAMETERS 
     CHUNK_SIZE: int = 3000
