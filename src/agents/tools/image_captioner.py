@@ -27,7 +27,7 @@ class ImageCaptioner:
             "image-to-text",
             model=settings.CAPTIONER_MODEL,
             device=self.device,
-            dtype=torch.float16 if self.device == 0 else torch.float32,
+            torch_dtype=torch.float16 if self.device == 0 else torch.float32,
         )
 
     def extract_base64_images(self, elements: List) -> List[str]:

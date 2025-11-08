@@ -17,7 +17,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 sys.path.append(str(PROJECT_ROOT))
 
 if __name__ == "__main__":
-    print(f"✓ OpenAI key loaded: {os.getenv('OPENAI_API_KEY')[:20]}...")
     uvicorn.run(
         "src.app.main:app",
         host="0.0.0.0",

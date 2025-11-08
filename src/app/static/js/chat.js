@@ -15,12 +15,12 @@ const Chat = {
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                this.sendMessage();
+                Chat.sendMessage();
             }
         });
         
         // Send button click
-        sendBtn.addEventListener('click', () => this.sendMessage());
+        sendBtn.addEventListener('click', () => Chat.sendMessage());
         
         // Image upload
         imageUploadBtn.addEventListener('click', () => imageInput.click());
@@ -42,7 +42,10 @@ const Chat = {
         const messageInput = document.getElementById('messageInput');
         const message = messageInput.value.trim();
         
-        if (!message && !AppState.uploadedImage) return;
+        if (!message && !AppState.uploadedImage) {
+            console.log('No message or image to send');
+            return;
+        }
         
         // Clear empty state
         const chatMessages = document.getElementById('chatMessages');
@@ -69,16 +72,33 @@ const Chat = {
             
             this.removeTypingIndicator(typingId);
             
-            let aiMessage = data.response;
+            // FIXED: Safely handle response
+            if (!data) {
+                throw new Error('No response from server');
+            }
+            
+            let aiMessage = data.response || 'No response generated. Please try again.';
+            
             if (data.image_caption) {
                 aiMessage = `[Image Analysis: ${data.image_caption}]\n\n${aiMessage}`;
             }
             
             this.addMessage('ai', aiMessage);
+            
         } catch (error) {
             console.error('Query error:', error);
             this.removeTypingIndicator(typingId);
-            this.addMessage('ai', 'Sorry, I encountered an error processing your request. Please try again.');
+            
+            // Better error message
+            let errorMsg = 'Sorry, I encountered an error processing your request.';
+            
+            if (error.message && error.message.includes('quota')) {
+                errorMsg = 'API quota exceeded. Please check your API credentials or try again later.';
+            } else if (error.message) {
+                errorMsg = `Error: ${error.message}. Please try again.`;
+            }
+            
+            this.addMessage('ai', errorMsg);
         }
     },
     
@@ -89,12 +109,15 @@ const Chat = {
         
         const avatarIcon = type === 'user' ? 'user' : 'bot';
         
+        // FIXED: Safely handle null/undefined text
+        const safeText = (text || 'No response').replace(/\n/g, '<br>');
+        
         messageDiv.innerHTML = `
             <div class="message-avatar ${type}-avatar">
                 <i data-lucide="${avatarIcon}" size="20" color="white"></i>
             </div>
             <div class="message-content">
-                <div class="message-text">${text.replace(/\n/g, '<br>')}</div>
+                <div class="message-text">${safeText}</div>
                 ${image ? `<img src="${image}" class="message-image" alt="Uploaded image">` : ''}
             </div>
         `;
@@ -132,6 +155,8 @@ const Chat = {
     
     removeTypingIndicator(id) {
         const element = document.getElementById(id);
-        if (element) element.remove();
+        if (element) {
+            element.remove();
+        }
     }
 };
