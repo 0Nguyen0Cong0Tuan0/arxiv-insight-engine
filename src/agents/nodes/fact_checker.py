@@ -1,6 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import AIMessage
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from src.monitoring.metrics_tracker import track_node_execution
 
 from config import settings
 
@@ -29,6 +30,7 @@ fact_check_prompt = ChatPromptTemplate.from_messages([
 
 fact_check_chain = fact_check_prompt | chat_model
 
+@track_node_execution("fact_check")
 def fact_check_verify(state):
     """Verify user's claims or statements against retrieved papers."""
     query = state["query"]

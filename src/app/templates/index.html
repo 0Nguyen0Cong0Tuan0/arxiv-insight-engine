@@ -5,18 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArXiv Insight Engine</title>
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- CSS Files -->
     <link rel="stylesheet" href="/static/css/variables.css">
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/components.css">
     <link rel="stylesheet" href="/static/css/animations.css">
+    <link rel="stylesheet" href="/static/css/voice.css">
 </head>
 <body>
     <div class="bg-animation"></div>
     
     <div class="container">
-        <!-- Header -->
         <header>
             <div class="header-content">
                 <div class="logo">
@@ -26,7 +24,7 @@
                     <div>
                         <h1>ArXiv Insight Engine</h1>
                         <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">
-                            AI-Powered Research Assistant
+                            AI-Powered Research Assistant with Voice
                         </p>
                     </div>
                 </div>
@@ -39,13 +37,12 @@
                         <div class="stat-value" id="chunksCount">0</div>
                         <div class="stat-label">Chunks Stored</div>
                     </div>
+                    <!-- Voice toggle will be added here by voice.js -->
                 </div>
             </div>
         </header>
 
-        <!-- Main Layout -->
         <div class="main-layout">
-            <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="tab-buttons">
                     <button class="tab-btn active" data-tab="upload">
@@ -58,7 +55,6 @@
                     </button>
                 </div>
 
-                <!-- Upload Tab -->
                 <div id="uploadTab" class="tab-content active">
                     <div class="upload-area" id="uploadArea">
                         <div class="upload-icon">
@@ -76,7 +72,6 @@
                     </button>
                 </div>
 
-                <!-- Search Tab -->
                 <div id="searchTab" class="tab-content">
                     <div class="search-box">
                         <input 
@@ -100,9 +95,20 @@
                         Ingest Selected Papers
                     </button>
                 </div>
+
+                <!-- Quick Links -->
+                <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
+                    <a href="/static/templates/metrics.html" 
+                       style="display: flex; align-items: center; gap: 10px; padding: 12px; 
+                              background: rgba(99, 102, 241, 0.1); border-radius: 12px; 
+                              color: var(--primary); text-decoration: none; font-weight: 600;
+                              transition: all 0.3s ease;">
+                        <i data-lucide="bar-chart-3" size="18"></i>
+                        <span>View Metrics Dashboard</span>
+                    </a>
+                </div>
             </aside>
 
-            <!-- Chat Area -->
             <main class="chat-container">
                 <div class="chat-messages" id="chatMessages">
                     <div class="empty-state">
@@ -111,10 +117,12 @@
                         </div>
                         <h2 class="empty-title">Ready to explore research papers</h2>
                         <p class="empty-subtitle">
-                            Upload PDFs or search ArXiv to begin. Then ask questions or upload images to analyze your research.
+                            Upload PDFs or search ArXiv to begin. Then ask questions, upload images, or use voice to analyze your research.
                         </p>
                     </div>
                 </div>
+
+                <!-- Voice panel will be inserted here by voice.js -->
 
                 <div class="chat-input-container">
                     <div class="chat-input-wrapper">
@@ -125,10 +133,10 @@
                             rows="1"
                         ></textarea>
                         <div class="input-actions">
-                            <button class="icon-btn" id="imageUploadBtn">
+                            <button class="icon-btn" id="imageUploadBtn" title="Upload image">
                                 <i data-lucide="image" size="20"></i>
                             </button>
-                            <button class="icon-btn send-btn" id="sendBtn">
+                            <button class="icon-btn send-btn" id="sendBtn" title="Send message">
                                 <i data-lucide="send" size="20"></i>
                             </button>
                         </div>
@@ -139,12 +147,18 @@
         </div>
     </div>
 
-    <!-- JavaScript Files -->
+    <!-- Scripts -->
     <script src="/static/js/state.js"></script>
     <script src="/static/js/api.js"></script>
     <script src="/static/js/upload.js"></script>
     <script src="/static/js/search.js"></script>
     <script src="/static/js/chat.js"></script>
+    <script src="/static/js/voice.js"></script>
     <script src="/static/js/main.js"></script>
+    
+    <script>
+        // Initialize Lucide icons after all DOM content is loaded
+        lucide.createIcons();
+    </script>
 </body>
 </html>

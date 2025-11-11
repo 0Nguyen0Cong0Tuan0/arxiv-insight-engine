@@ -1,6 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import AIMessage
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from src.monitoring.metrics_tracker import track_node_execution
 
 from config import settings
 
@@ -29,6 +30,7 @@ comparison_prompt = ChatPromptTemplate.from_messages([
 
 comparison_chain = comparison_prompt | chat_model
 
+@track_node_execution("compare")
 def compare(state):
     """Compare concepts, methods, or findings across papers."""
     query = state["query"]
