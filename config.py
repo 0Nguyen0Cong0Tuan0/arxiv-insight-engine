@@ -44,6 +44,18 @@ class Settings(BaseSettings):
     LANGCHAIN_API_KEY: Optional[str] = None
     LANGCHAIN_TRACING_V2: bool = False
 
+    # Monitoring
+    METRICS_LOG_FILE: Path = Path("data/metrics_log.jsonl")
+    ENABLE_LANGSMITH: bool = False
+
+    # Voice settings
+    WHISPER_MODEL: str = "base"  # tiny, base, small, medium, large
+    TTS_LANGUAGE: str = "en"
+    ENABLE_VOICE_BY_DEFAULT: bool = False
+
+    # Monitoring
+    METRICS_LOG_FILE: Path = Path("data/metrics_log.jsonl")
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

@@ -2,6 +2,7 @@ from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate
 from src.agents.tools.image_captioner import ImageCaptioner
+from src.monitoring.metrics_tracker import track_node_execution
 
 from config import settings
 
@@ -25,6 +26,7 @@ prompt = ChatPromptTemplate.from_messages([
 
 chain = prompt | chat_model
 
+@track_node_execution("analyze_figures")
 def analyze_figures(state):
     """Analyze and explain figures from the retrieved chunks."""
     chunks = state.get("retrieved_chunks", [])

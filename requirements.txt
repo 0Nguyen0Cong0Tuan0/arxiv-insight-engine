@@ -18,3 +18,8 @@ python-dotenv
 fastapi
 uvicorn[standard]
 python-multipart
+openai-whisper
+gTTS
+pydub
+gradio
+langsmith

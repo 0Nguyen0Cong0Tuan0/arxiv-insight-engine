@@ -4,11 +4,6 @@ from dotenv import load_dotenv
 # Load environment FIRST
 load_dotenv()
 
-# Verify it worked
-if not os.getenv("OPENAI_API_KEY"):
-    print("ERROR: OPENAI_API_KEY not loaded!")
-    exit(1)
-
 import uvicorn
 from pathlib import Path
 import sys

@@ -1,6 +1,7 @@
 from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from src.monitoring.metrics_tracker import track_node_execution
 
 from config import settings
 
@@ -30,6 +31,7 @@ analysis_prompt = ChatPromptTemplate.from_messages([
 
 analysis_chain = analysis_prompt | chat_model
 
+@track_node_execution("analyze")
 def analyze(state):
     """Provide detailed analysis of content, figures, or specific aspects."""
     query = state["query"]

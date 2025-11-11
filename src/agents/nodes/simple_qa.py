@@ -1,6 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import AIMessage
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from src.monitoring.metrics_tracker import track_node_execution
 
 from config import settings
 
@@ -29,6 +30,7 @@ qa_prompt = ChatPromptTemplate.from_messages([
 
 qa_chain = qa_prompt | chat_model
 
+@track_node_execution("simple_qa")
 def simple_qa(state):
     """Answer simple questions using retrieved context."""
     query = state["query"]

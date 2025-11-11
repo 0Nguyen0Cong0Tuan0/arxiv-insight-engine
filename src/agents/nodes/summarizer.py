@@ -1,8 +1,10 @@
 from src.agents.tools.summarizer import Summarizer
 from langchain_core.messages import AIMessage
+from src.monitoring.metrics_tracker import track_node_execution
 
 summarizer = Summarizer()
 
+@track_node_execution("summarize")
 def summarize_node(state):
     """
     Summarize the retrieved text chunks or generate a summary answer.
