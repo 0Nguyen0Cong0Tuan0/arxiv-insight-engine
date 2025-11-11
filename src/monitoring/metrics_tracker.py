@@ -27,7 +27,7 @@ class MetricsTracker:
     _instance = None
     _lock = Lock()
     
-    # Cost estimates (USD per 1K tokens) - Adjust based on your models
+    # Cost estimates (USD per 1K tokens) - assumed rates
     COST_RATES = {
         "llm": 0.0002,  # Hugging Face Inference API estimate
         "embedding": 0.00001,

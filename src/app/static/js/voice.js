@@ -4,8 +4,7 @@ class VoiceAssistant {
         this.mediaRecorder = null;
         this.audioChunks = [];
         this.currentAudio = null;
-        this.voiceEnabled = localStorage.getItem('voice-enabled') === 'true';
-        
+                
         this.init();
     }
     
@@ -34,11 +33,11 @@ class VoiceAssistant {
             voicePanel.style.display = this.voiceEnabled ? 'block' : 'none';
             voicePanel.innerHTML = `
                 <div class="voice-controls">
-                    <button id="voice-record-btn" class="btn-voice" title="Record voice query">
+                    <button id="voice-record-btn" class="btn btn-primary" style="width: 100%;" title="Record voice query">
                         <i data-lucide="mic"></i>
                         <span>Record Voice Query</span>
                     </button>
-                    <button id="voice-stop-btn" class="btn-voice" style="display: none;" title="Stop recording">
+                    <button id="voice-stop-btn" class="btn btn-primary" style="display: none; width: 100%; background: var(--error, #ef4444); border-color: var(--error, #ef4444);" title="Stop recording">
                         <i data-lucide="square"></i>
                         <span>Stop Recording</span>
                     </button>
@@ -61,9 +60,24 @@ class VoiceAssistant {
             }
         }
         
-        // Add voice toggle to header
-        this.addVoiceToggle();
-        
+        // Add voice toggle button to chat input actions
+        const inputActions = document.querySelector('.input-actions');
+        if (inputActions) {
+            const voiceToggleBtn = document.createElement('button');
+            voiceToggleBtn.className = 'icon-btn';
+            voiceToggleBtn.id = 'voice-toggle';
+            voiceToggleBtn.title = this.voiceEnabled ? 'Voice mode is ON' : 'Voice mode is OFF';
+            voiceToggleBtn.innerHTML = `<i data-lucide="${this.voiceEnabled ? 'mic' : 'mic-off'}" size="20"></i>`;
+            voiceToggleBtn.addEventListener('click', () => this.toggleVoiceMode());
+
+            // Prepend it so it appears first in the list of buttons
+            inputActions.prepend(voiceToggleBtn);
+ 
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
         // Attach event listeners
         this.attachEventListeners();
     }
@@ -91,22 +105,27 @@ class VoiceAssistant {
     toggleVoiceMode() {
         this.voiceEnabled = !this.voiceEnabled;
         localStorage.setItem('voice-enabled', this.voiceEnabled);
-        
+    
         const voicePanel = document.getElementById('voice-panel');
-        const voiceToggle = document.getElementById('voice-toggle');
-        
+        const voiceToggle = document.getElementById('voice-toggle'); // This is now our icon button
+    
         if (voicePanel) {
             voicePanel.style.display = this.voiceEnabled ? 'block' : 'none';
         }
-        
+    
         if (voiceToggle) {
-            voiceToggle.className = 'voice-toggle' + (this.voiceEnabled ? ' active' : '');
-            voiceToggle.querySelector('span').textContent = this.voiceEnabled ? 'Voice On' : 'Voice Off';
+            // Update the button's icon and title
+            voiceToggle.title = this.voiceEnabled ? 'Voice mode is ON' : 'Voice mode is OFF';
+            voiceToggle.innerHTML = `<i data-lucide="${this.voiceEnabled ? 'mic' : 'mic-off'}" size="20"></i>`;
+      
+            // Re-render the new icon
+            if (window.lucide) {
+                lucide.createIcons();
+            }
         }
         
         this.showNotification(
-            `Voice mode ${this.voiceEnabled ? 'enabled' : 'disabled'}`,
-            'success'
+            `Voice mode ${this.voiceEnabled ? 'enabled' : 'disabled'}`, 'success'
         );
     }
     
