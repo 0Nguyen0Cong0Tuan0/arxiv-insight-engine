@@ -36,7 +36,12 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup actions
-    logger.info("Starting up ArXiv Insight Engine...")
+    logger.info("=" * 50)
+    logger.info("ArXiv Insight Engine Started")
+    logger.info(f"Voice Assistant: Enabled")
+    logger.info(f"Metrics Tracking: Enabled")
+    logger.info(f"Whisper Model: {getattr(settings, 'WHISPER_MODEL', 'base')}")
+    logger.info("=" * 50)
     yield
     # Shutdown actions
     logger.info("Shutting down ArXiv Insight Engine...")
@@ -67,6 +72,14 @@ async def root():
     if html_path.exists():
         return html_path.read_text()
     return "<h1>ArXiv Insight Engine</h1><p>Frontend not found. Please create templates/index.html</p>"
+
+@app.get("/metrics.html", response_class=HTMLResponse)
+async def metrics_page():
+    """Serve the metrics dashboard HTML page"""
+    html_path = PROJECT_ROOT / "src/app/templates/metrics.html"
+    if html_path.exists():
+        return html_path.read_text()
+    return "<h1>Metrics Dashboard</h1><p>Metrics page not found.</p>"
 
 @app.get("/api/health")
 async def health_check():
