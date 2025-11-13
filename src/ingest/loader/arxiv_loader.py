@@ -5,7 +5,7 @@ import requests
 from pathlib import Path
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
+PROJECT_ROOT = Path(__file__).resolve().parents[3] 
 sys.path.append(str(PROJECT_ROOT))
 from config import settings
 
@@ -64,10 +64,11 @@ def download_single_arxiv_paper(paper_id: str, save_dir: Path = settings.RAW_PAP
     """
     save_dir.mkdir(parents=True, exist_ok=True)
     
-    if 'v' in paper_id:
-        paper_id_base = paper_id.split('v')[0]
-    else:
-        paper_id_base = paper_id
+    # if 'v' in paper_id:
+    #     paper_id_base = paper_id.split('v')[0]
+    # else:
+    
+    paper_id_base = paper_id
     
     client = arxiv.Client()
     search = arxiv.Search(
@@ -123,11 +124,7 @@ def download_arxiv_papers(query: str, max_docs: int = settings.MAX_PAPERS, save_
     
     for result in client.results(search):
         paper_id = result.entry_id.split('/')[-1]
-        if 'v' in paper_id:
-            paper_id_base = paper_id.split('v')[0]
-        else:
-            paper_id_base = paper_id
-            
+
         filename = f"{paper_id}.pdf"
         pdf_url = result.pdf_url
         pdf_path = str(save_dir / filename)

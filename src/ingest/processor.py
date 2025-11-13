@@ -10,15 +10,7 @@ from src.models.document import DocumentChunk, ChunkType
 
 def process_pdf(pdf_path: str, paper_id: str):
     """
-    Processes a PDF file to extract text, tables, and figures,
-    and returns structured document chunks.
-
-    Args:
-        pdf_path (str): Path to the PDF file.
-        paper_id (str): Identifier for the paper.
-
-    Returns:
-        List of DocumentChunk objects.
+    Processes a PDF file to extract text, tables, and figures, and returns structured document chunks.
     """
     elements = parse_pdf(pdf_path)
 

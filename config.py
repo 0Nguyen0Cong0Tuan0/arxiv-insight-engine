@@ -5,7 +5,7 @@ from typing import Optional
 import os
 from dotenv import load_dotenv
 
-# IMPORTANT: Load .env file before anything else
+# Load .env file before anything else
 load_dotenv()
 
 class Settings(BaseSettings):
@@ -78,6 +78,9 @@ if settings.LANGCHAIN_TRACING_V2:
     os.environ["LANGCHAIN_TRACING_V2"] = "true"
 
 class TextCategory(str, Enum):
+    """
+    Enum for different types of document chunks.
+    """
     NARRATIVE_TEXT = "NarrativeText"
     TITLE = "Title"
     TEXT = "Text"
