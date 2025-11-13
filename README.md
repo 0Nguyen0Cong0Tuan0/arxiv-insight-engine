@@ -843,10 +843,6 @@ arxiv-insight-engine/
 │   └── stores/
 │       ├── feedback_store.py        # User feedback
 │       └── vector_store.py          # ChromaDB interface
-├── data/
-│   ├── raw_papers/                  # Original PDFs
-│   ├── processed/                   # Processed documents
-│   └── metrics_log.jsonl            # Metrics log
 ├── chroma_db/                       # Vector database
 ├── config.py                        # Configuration
 ├── requirements.txt                 # Dependencies
