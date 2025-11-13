@@ -1696,7 +1696,7 @@ Thanks to all contributors and the open-source community for making this project
 
 ### Get Help
 
-- 📧 **Email**: nguyencongtuan@example.com
+- 📧 **Email**: nguyencongtuan0810@gmail.com
 - 🐛 **Issues**: [GitHub Issues](https://github.com/0Nguyen0Cong0Tuan0/arxiv-insight-engine/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/0Nguyen0Cong0Tuan0/arxiv-insight-engine/discussions)
 
@@ -1705,31 +1705,6 @@ Thanks to all contributors and the open-source community for making this project
 - ⭐ **Star** the repository to show support
 - 👀 **Watch** for updates and releases
 - 🍴 **Fork** to create your own version
-
----
-
-## 🗺️ Roadmap
-
-### Version 1.1 (Q1 2025)
-- [ ] Multi-user support with authentication
-- [ ] Conversation history and bookmarking
-- [ ] Advanced filtering and search
-- [ ] Export results to PDF/Word
-- [ ] Mobile-responsive design improvements
-
-### Version 1.2 (Q2 2025)
-- [ ] Support for more document formats (Word, LaTeX)
-- [ ] Collaborative annotations and notes
-- [ ] Custom model fine-tuning interface
-- [ ] API rate limiting and quotas
-- [ ] Advanced analytics dashboard
-
-### Version 2.0 (Q3 2025)
-- [ ] Multi-agent collaboration
-- [ ] Real-time collaborative research
-- [ ] Integration with reference managers (Zotero, Mendeley)
-- [ ] Citation network visualization
-- [ ] Research paper recommendations
 
 ---
 
