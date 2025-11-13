@@ -29,8 +29,6 @@
 - [Project Structure](#-project-structure)
 - [Features Deep Dive](#-features-deep-dive)
 - [Performance & Metrics](#-performance--metrics)
-- [Deployment](#-deployment)
-- [Contributing](#-contributing)
 - [License](#-license)
 
 ---
@@ -41,12 +39,12 @@
 
 ### What Makes It Special?
 
-- 🎯 **Intelligent Query Routing**: Automatically classifies queries and routes them to specialized processing nodes
-- 🎤 **Voice-First Interface**: Complete speech-to-text and text-to-speech integration
-- 🖼️ **Multimodal Understanding**: Analyzes figures, tables, and visual content from papers
-- 📊 **Real-time Monitoring**: Track costs, latency, and performance metrics
-- 🗂️ **Papers Management**: Browse, view, and manage your research paper database
-- 🔄 **Hybrid Retrieval**: Combines dense vector search with BM25 for optimal results
+- 🎯 **Intelligent Query Routing** automatically classifies queries and routes them to specialized processing nodes
+- 🎤 **Voice-First Interface** complete speech-to-text and text-to-speech integration
+- 🖼️ **Multimodal Understanding** analyzes figures, tables, and visual content from papers
+- 📊 **Real-time Monitoring** track costs, latency, and performance metrics
+- 🗂️ **Papers Management** browse, view, and manage your research paper database
+- 🔄 **Hybrid Retrieval** combines dense vector search with BM25 for optimal results
 
 ---
 
@@ -60,19 +58,19 @@
 <td width="25%">
 
 #### Smart Query Routing
-- **Technology**: LangGraph State Machine
-- **Model**: Meta Llama 3.3 70B Instruct
-- **Routing Categories**: Simple Q&A, Summarization, Comparison Analysis, Deep Analysis, Fact Checking
+- **Technology** LangGraph State Machine
+- **Model** Meta Llama 3.3 70B Instruct
+- **Routing Categories** simple Q&A, summarization, comparison analysis, deep analysis, fact checking
 
 </td>
 <td width="25%">
 
 #### Hybrid Retrieval
-- **Vector Search**: ChromaDB with cosine similarity
-- **Keyword Search**: BM25 algorithm
-- **Ensemble**: RRF (Reciprocal Rank Fusion)
-- **Embedding Model**: all-MiniLM-L6-v2
-- **Reranking**: Weighted fusion (70% vector, 30% BM25)
+- **Vector search** ChromaDB with cosine similarity
+- **Keyword search** BM25 algorithm
+- **Ensemble** RRF (Reciprocal Rank Fusion)
+- **Embedding model** all-MiniLM-L6-v2
+- **Reranking** weighted fusion (70% vector, 30% BM25)
 
 </td>
 </tr>
@@ -270,12 +268,12 @@ Optional:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Frontend (Browser)                       │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│  │   Chat   │  │  Voice   │  │  Papers  │  │ Metrics  │   │
-│  │    UI    │  │  Panel   │  │  Manager │  │Dashboard │   │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘   │
-└───────┼─────────────┼─────────────┼──────────────┼─────────┘
+│                     Frontend (Browser)                      │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐    │
+│  │   Chat   │  │  Voice   │  │  Papers  │  │ Metrics   │    │
+│  │    UI    │  │  Panel   │  │  Manager │  │ Dashboard │    │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └─────┬─────┘    │
+└───────┼─────────────┼─────────────┼──────────────┼──────────┘
         │             │             │              │
         └─────────────┴─────────────┴──────────────┘
                             │
@@ -284,23 +282,23 @@ Optional:
                     │   Backend      │
                     └───────┬────────┘
                             │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-   ┌────▼─────┐      ┌─────▼──────┐     ┌─────▼────┐
+        ┌───────────────────┼─────────────────┐
+        │                   │                 │
+   ┌────▼─────┐      ┌──────▼─────┐     ┌─────▼────┐
    │  Voice   │      │  LangGraph │     │ ChromaDB │
    │ Handler  │      │   Agent    │     │  Store   │
-   └──────────┘      └─────┬──────┘     └──────────┘
+   └──────────┘      └──────┬─────┘     └──────────┘
                             │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-   ┌────▼─────┐      ┌─────▼──────┐     ┌─────▼────┐
+        ┌───────────────────┼─────────────────┐
+        │                   │                 │
+   ┌────▼─────┐      ┌──────▼─────┐     ┌─────▼────┐
    │ Whisper  │      │   Router   │     │   BM25   │
    │   STT    │      │    Node    │     │ Retriever│
-   └──────────┘      └─────┬──────┘     └──────────┘
+   └──────────┘      └──────┬─────┘     └──────────┘
                             │
-        ┌───────────────────┼───────────────────┐
-        │         │         │         │         │
-   ┌────▼───┐ ┌──▼──┐ ┌───▼───┐ ┌───▼───┐ ┌──▼──┐
+        ┌───────────────────┼────────────────┐
+        │        │          │       │        │
+   ┌────▼───┐ ┌──▼──┐ ┌─────▼─┐ ┌───▼───┐ ┌──▼──┐
    │Simple  │ │Sum- │ │Compare│ │Analyze│ │Fact │
    │  Q&A   │ │mary │ │       │ │       │ │Check│
    └────────┘ └─────┘ └───────┘ └───────┘ └─────┘
@@ -485,64 +483,15 @@ uvicorn src.app.main:app --reload --host 0.0.0.0 --port 8000
 # API Docs: http://localhost:8000/docs
 ```
 
----
+### Result
 
-## ⚙️ Configuration
+**Home**
+<img width="1907" height="876" alt="image" src="https://github.com/user-attachments/assets/b4f8890c-82c0-40b0-b246-8e8d780c94e8" />
 
-### config.py Settings
+**Metric Dashboard**
+<img width="1166" height="735" alt="image" src="https://github.com/user-attachments/assets/4ae489e8-f95c-43f5-9cd3-d3d550c18b2c" />
+<img width="1172" height="804" alt="image" src="https://github.com/user-attachments/assets/3aff4404-42d2-4814-b84c-f7e7aee99109" />
 
-```python
-# Paths
-RAW_PAPERS_DIR: Path = "data/raw_papers"
-PROCESSED_DIR: Path = "data/processed"
-CHROMA_PERSIST_DIR: str = "./chroma_db"
-
-# Models
-EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
-SUMMARIZER_MODEL: str = "facebook/bart-large-cnn"
-CAPTIONER_MODEL: str = "Salesforce/blip-image-captioning-large"
-LLM_MODEL: str = "meta-llama/Llama-3.3-70B-Instruct"
-
-# Chunking
-CHUNK_SIZE: int = 3000
-CHUNK_OVERLAP: int = 100
-
-# Voice
-WHISPER_MODEL: str = "base"  # Options: tiny, base, small, medium, large
-TTS_LANGUAGE: str = "en"
-
-# LLM Generation
-LLM_MAX_NEW_TOKENS: int = 8192
-```
-
-### Customization Options
-
-#### 1. Change LLM Model
-```python
-# In config.py
-LLM_MODEL: str = "meta-llama/Llama-3.1-8B-Instruct"  # Smaller, faster
-# or
-LLM_MODEL: str = "mistralai/Mistral-7B-Instruct-v0.2"  # Alternative model
-```
-
-#### 2. Adjust Voice Quality
-```python
-# Better accuracy, slower
-WHISPER_MODEL: str = "medium"
-
-# Faster, lower accuracy
-WHISPER_MODEL: str = "tiny"
-```
-
-#### 3. Modify Retrieval
-```python
-# In src/agents/tools/hybrid_retriever.py
-# Adjust ensemble weights
-EnsembleRetriever(
-    retrievers=[vector_retriever, bm25],
-    weights=[0.8, 0.2]  # More weight on vector search
-)
-```
 
 ---
 
@@ -902,9 +851,6 @@ arxiv-insight-engine/
 ├── chroma_db/                       # Vector database
 ├── config.py                        # Configuration
 ├── requirements.txt                 # Dependencies
-├── Dockerfile                       # Docker image
-├── fly.toml                         # Fly.io config
-├── .env.example                     # Environment template
 └── README.md                        # This file
 ```
 
@@ -914,7 +860,7 @@ arxiv-insight-engine/
 
 ### 1. Intelligent Query Routing
 
-**Technology**: LangGraph + Meta Llama 3.3 70B
+**Technology** LangGraph + Meta Llama 3.3 70B
 
 The router classifies incoming queries into one of five categories:
 
@@ -939,14 +885,9 @@ Categories:
    → Retrieves evidence → Verification → Response
 ```
 
-**Implementation Details**:
-- Uses few-shot prompting for classification
-- Fallback to simple_qa if uncertain
-- Logs routing decisions for monitoring
-
 ### 2. Hybrid Retrieval System
 
-**Technology**: ChromaDB + BM25 + RRF Fusion
+**Technology** ChromaDB + BM25 + RRF Fusion
 
 ```python
 # Retrieval Pipeline
@@ -963,12 +904,6 @@ Reciprocal Rank Fusion
      ↓
 Final Top-K Results (k=10)
 ```
-
-**Why Hybrid?**:
-- Vector search: Semantic understanding
-- BM25: Exact keyword matching
-- Fusion: Best of both worlds
-- Performance: ~30% improvement over single method
 
 ### 3. Multimodal Processing
 
@@ -1025,11 +960,6 @@ Audio Waveform → Mel-Spectrogram
 - large: 1550M params, best accuracy
 ```
 
-**Accuracy Benchmarks**:
-- Base model: ~95% WER (Word Error Rate)
-- Supports 99 languages
-- Real-time factor: 0.3x (faster than real-time)
-
 #### Text-to-Speech (gTTS)
 ```python
 # gTTS Process
@@ -1048,7 +978,7 @@ Text Input → Google TTS API → MP3 Audio Stream
 
 ### 5. Monitoring & Observability
 
-**Technology**: Custom metrics tracker + Chart.js visualization
+**Technology** Custom metrics tracker + Chart.js visualization
 
 ```python
 # Metrics Collection
@@ -1093,7 +1023,7 @@ MetricRecord {
 
 ### 6. Papers Management
 
-**Technology**: FastAPI + ChromaDB + Custom UI
+**Technology** FastAPI + ChromaDB + Custom UI
 
 ```python
 # Papers Database Operations
@@ -1148,8 +1078,8 @@ BM25 Only:
     - Latency: 80ms
 
 Hybrid (RRF):
-    - Precision@10: 0.83  ⬆️ +15%
-    - Recall@10: 0.79     ⬆️ +10%
+    - Precision@10: 0.83   +15%
+    - Recall@10: 0.79      +10%
     - Latency: 180ms
 ```
 
@@ -1183,69 +1113,6 @@ Storage (ChromaDB):
 Total: ~$42/month for 30,000 queries
        ~$0.0014 per query
 ```
----
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how to get started:
-
-### Development Setup
-
-```bash
-# Fork the repository
-git clone https://github.com/your-username/arxiv-insight-engine.git
-cd arxiv-insight-engine
-
-# Create feature branch
-git checkout -b feature/amazing-feature
-
-# Install dev dependencies
-pip install -r requirements-dev.txt
-
-# Install pre-commit hooks
-pre-commit install
-```
-
-### Contribution Guidelines
-
-1. **Code Quality**
-   - Follow PEP 8 style guide
-   - Add type hints to functions
-   - Write docstrings for classes and methods
-   - Keep functions small and focused
-
-2. **Testing**
-   - Write tests for new features
-   - Maintain >80% code coverage
-   - Test edge cases and error handling
-
-3. **Documentation**
-   - Update README for new features
-   - Add inline comments for complex logic
-   - Update API documentation
-
-4. **Commit Messages**
-   ```
-   feat: Add voice query support
-   fix: Resolve ChromaDB connection issue
-   docs: Update installation instructions
-   refactor: Optimize retrieval pipeline
-   ```
-
-5. **Pull Requests**
-   - Describe changes clearly
-   - Reference related issues
-   - Include screenshots for UI changes
-   - Ensure CI/CD passes
-
-### Areas for Contribution
-
-- 🎯 **New Features**: Additional query types, model integrations
-- 🐛 **Bug Fixes**: Check issues tab
-- 📚 **Documentation**: Tutorials, examples, translations
-- 🧪 **Testing**: Unit tests, integration tests
-- 🎨 **UI/UX**: Design improvements, accessibility
-- ⚡ **Performance**: Optimization, caching strategies
 
 ---
 
@@ -1305,39 +1172,3 @@ This project builds upon research in:
 
 Thanks to all contributors and the open-source community for making this project possible.
 
----
-
-## 📞 Contact & Support
-
-### Get Help
-
-- 📧 **Email**: nguyencongtuan0810@gmail.com
-- 🐛 **Issues**: [GitHub Issues](https://github.com/0Nguyen0Cong0Tuan0/arxiv-insight-engine/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/0Nguyen0Cong0Tuan0/arxiv-insight-engine/discussions)
-
-### Stay Updated
-
-- ⭐ **Star** the repository to show support
-- 👀 **Watch** for updates and releases
-- 🍴 **Fork** to create your own version
-
----
-
-## 📊 Statistics
-
-![GitHub Stars](https://img.shields.io/github/stars/0Nguyen0Cong0Tuan0/arxiv-insight-engine?style=social)
-![GitHub Forks](https://img.shields.io/github/forks/0Nguyen0Cong0Tuan0/arxiv-insight-engine?style=social)
-![GitHub Issues](https://img.shields.io/github/issues/0Nguyen0Cong0Tuan0/arxiv-insight-engine)
-![GitHub Pull Requests](https://img.shields.io/github/issues-pr/0Nguyen0Cong0Tuan0/arxiv-insight-engine)
-
----
-
-<div align="center">
-
-**Built with ❤️ by [Nguyen Cong Tuan](https://github.com/0Nguyen0Cong0Tuan0)**
-
-*Empowering researchers with AI-driven insights*
-
-[⬆ Back to Top](#-arxiv-insight-engine)
-
-</div>
