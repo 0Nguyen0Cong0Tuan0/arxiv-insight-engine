@@ -85,21 +85,21 @@
 <td width="50%">
 
 #### Speech-to-Text
-- **Engine**: OpenAI Whisper
-- **Model**: Base
-- **Languages**: Multi-language support
-- **Accuracy**: ~95% for clear speech
-- **Latency**: 2-5 seconds per query
+- **Engine** OpenAI Whisper
+- **Model** Base
+- Multi-language support
+- ~95% for clear speech
+- 2-5 seconds per query
 
 </td>
 <td width="50%">
 
 #### Text-to-Speech
-- **Engine**: Google TTS (gTTS)
-- **Languages**: 100+ languages
-- **Voice**: Natural-sounding synthesis
-- **Latency**: 1-2 seconds
-- **Format**: MP3 audio stream
+- **Engine** Google TTS (gTTS)
+- 100+ languages
+- Natural-sounding synthesis
+- 1-2 seconds latency
+- MP3 audio stream
 
 </td>
 </tr>
@@ -114,21 +114,20 @@ Audio Input → Whisper Transcription → LLM Processing → Response Generation
 ### 3. 📄 Multimodal Document Processing
 
 #### PDF Ingestion Pipeline
-- **Parser**: Unstructured.io
-- **Chunking Strategy**: Recursive character splitting
-- **Chunk Size**: 3000 characters with 100-char overlap
-- **Content Types**: Text, figures, tables
+- **Parser** Unstructured.io
+- **Chunking strategy** - Recursive character splitting
+- **Chunk size** - 3000 characters with 100-char overlap
+- **Content types** - text, figures, tables
 
 #### Visual Analysis
-- **Image Captioning**: Salesforce BLIP
-- **Model**: blip-image-captioning-large
-- **Capabilities**: Figure description generation, chart and graph analysis, Diagram interpretation, Visual context extraction
+- **Image captioning** Salesforce BLIP
+- **Model** blip-image-captioning-large
+- **Capabilities** with figure description generation, chart and graph analysis, diagram interpretation, visual context extraction
 
 #### Text Summarization
-- **Model**: Facebook BART-Large-CNN
-- **Strategy**: Hierarchical summarization
-- **Max length**: 130 tokens and **min length**: 30 tokens
-- **Approach**: Chunk-level → Document-level
+- **Model** Facebook BART-Large-CNN
+- **Max length** 130 tokens and **min length** 30 tokens
+- Chunk-level → Document-level and hierarchical summarization
 
 ### 4. 📊 Real-time Monitoring & Analytics
 
@@ -171,20 +170,20 @@ Audio Input → Whisper Transcription → LLM Processing → Response Generation
 
 ### 5. 🗂️ Papers Management System
 
-- **Database Browser**: View all indexed papers
-- **Bulk Operations**: Select and delete multiple papers
-- **Detail View**: Inspect individual chunks
-- **Metadata Display**: Paper ID, title, chunk count, size
-- **Search & Filter**: Quick paper lookup
-- **Stats Integration**: Real-time count updates
+- **Database Browser** view all indexed papers
+- **Bulk Operations** select and delete multiple papers
+- **Detail View** inspect individual chunks
+- **Metadata Display** paper ID, title, chunk count, size
+- **Search & Filter** quick paper lookup
+- **Stats Integration** real-time count updates
 
 ### 6. 🔍 ArXiv Integration
 
-- **Direct Search**: Query ArXiv from the interface
-- **Paper Preview**: Title, authors, abstract, date
-- **Batch Download**: Select multiple papers for ingestion
-- **Automatic Processing**: PDF → Chunks → Embeddings → Storage
-- **Progress Tracking**: Real-time status updates
+- **Direct Search** query ArXiv from the interface
+- **Paper Preview** title, authors, abstract, date
+- **Batch Download** select multiple papers for ingestion
+- **Automatic Processing** PDF → Chunks → Embeddings → Storage
+- **Progress Tracking** real-time status updates
 
 ---
 
