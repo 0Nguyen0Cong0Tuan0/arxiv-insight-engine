@@ -6,7 +6,7 @@ sys.path.append(str(PROJECT_ROOT))
 
 from config import TextCategory
 from src.ingest.parser.multimodal_parser import parse_pdf
-from src.models.document import DocumentChunk, ChunkType
+from src.models.document import DocumentChunk
 
 def process_pdf(pdf_path: str, paper_id: str):
     """
@@ -44,20 +44,20 @@ def process_pdf(pdf_path: str, paper_id: str):
 
             if category in TEXT_CATEGORIES:
                 chunks.append(DocumentChunk(
-                    paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.TEXT,
+                    paper_id=paper_id, chunk_id=chunk_id, type=TEXT_CATEGORIES.TextCategory.TEXT,
                     content=getattr(elem, "text", ""), 
                 ))
             
             elif category == "Table":
                 chunks.append(DocumentChunk(
-                    paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.TABLE,
+                    paper_id=paper_id, chunk_id=chunk_id, type=TEXT_CATEGORIES.TextCategory.TEXT,
                     content=getattr(elem, "text", ""), 
                     metadata={"html": getattr(elem.metadata, "text_as_html", "") or ""}
                 ))
 
             elif category == "Image":
                 chunks.append(DocumentChunk(
-                    paper_id=paper_id, chunk_id=chunk_id, type=ChunkType.FIGURE,
+                    paper_id=paper_id, chunk_id=chunk_id, type=TEXT_CATEGORIES.TextCategory.FIGURE,
                     content=getattr(elem.metadata, "image_base64", ""),
                 ))
     
