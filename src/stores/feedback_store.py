@@ -34,10 +34,6 @@ def init_feedback():
 def store_feedback(query: str, correction: str):
     """
     Stores user feedback in the ChromaDB collection.
-
-    Args:
-        query (str): The original query string.
-        correction (str): The user's correction or feedback.
     """
     collection = chroma_client.get_collection(name=settings.FEEDBACK_COLLECTION)
     vector = embed_text(query)
@@ -56,13 +52,6 @@ def store_feedback(query: str, correction: str):
 def get_feedback(query: str, n_results: int = 5):
     """
     Retrieve similar feedback for a given query.
-    
-    Args:
-        query (str): The query to search for.
-        n_results (int): Number of similar feedback items to return.
-    
-    Returns:
-        dict: Similar feedback from the collection.
     """
     collection = chroma_client.get_collection(name=settings.FEEDBACK_COLLECTION)
     vector = embed_text(query)

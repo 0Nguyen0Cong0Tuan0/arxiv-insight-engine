@@ -249,6 +249,130 @@ async def ingest_arxiv_papers(request: IngestPapersRequest):
         logger.error(f"Error in ingest endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Error ingesting ArXiv papers: {str(e)}")
 
+@app.get("/api/papers/list")
+async def list_papers():
+    """Get all papers and their chunks from the database"""
+    try:
+        from src.stores.vector_store import get_all_documents
+        
+        all_docs = get_all_documents()
+        
+        # Group chunks by paper_id
+        papers_dict = {}
+        for doc in all_docs:
+            metadata = doc.get("metadata", {})
+            paper_id = metadata.get("paper_id", "Unknown")
+            
+            if paper_id not in papers_dict:
+                papers_dict[paper_id] = {
+                    "paper_id": paper_id,
+                    "title": metadata.get("title", "Unknown Title"),
+                    "chunk_count": 0,
+                    "chunks": [],
+                    "total_size": 0
+                }
+            
+            papers_dict[paper_id]["chunk_count"] += 1
+            papers_dict[paper_id]["total_size"] += len(doc.get("document", ""))
+            papers_dict[paper_id]["chunks"].append({
+                "chunk_id": doc.get("id"),
+                "content_preview": doc.get("document", "")[:200] + "...",
+                "content_length": len(doc.get("document", "")),
+                "type": metadata.get("type", "text")
+            })
+        
+        # Convert to list and sort by paper_id
+        papers_list = sorted(papers_dict.values(), key=lambda x: x["paper_id"])
+        
+        return {
+            "success": True,
+            "papers": papers_list,
+            "total_papers": len(papers_list),
+            "total_chunks": len(all_docs)
+        }
+    
+    except Exception as e:
+        logger.error(f"Error listing papers: {e}")
+        raise HTTPException(status_code=500, detail=f"Error retrieving papers: {str(e)}")
+
+@app.delete("/api/papers/delete")
+async def delete_papers(paper_ids: List[str]):
+    """Delete selected papers and all their chunks"""
+    try:
+        from src.stores.vector_store import get_collection, get_all_documents
+        
+        collection = get_collection()
+        all_docs = get_all_documents()
+        
+        # Find all chunk IDs for the selected papers
+        chunk_ids_to_delete = []
+        for doc in all_docs:
+            metadata = doc.get("metadata", {})
+            paper_id = metadata.get("paper_id", "")
+            if paper_id in paper_ids:
+                chunk_ids_to_delete.append(doc.get("id"))
+        
+        if chunk_ids_to_delete:
+            # Delete from ChromaDB
+            collection.delete(ids=chunk_ids_to_delete)
+            logger.info(f"Deleted {len(chunk_ids_to_delete)} chunks for papers: {paper_ids}")
+        
+        return {
+            "success": True,
+            "message": f"Deleted {len(paper_ids)} papers",
+            "papers_deleted": paper_ids,
+            "chunks_deleted": len(chunk_ids_to_delete)
+        }
+    
+    except Exception as e:
+        logger.error(f"Error deleting papers: {e}")
+        raise HTTPException(status_code=500, detail=f"Error deleting papers: {str(e)}")
+
+@app.get("/api/papers/{paper_id}")
+async def get_paper_details(paper_id: str):
+    """Get detailed information about a specific paper"""
+    try:
+        from src.stores.vector_store import get_all_documents
+        
+        all_docs = get_all_documents()
+        
+        # Find all chunks for this paper
+        paper_chunks = []
+        paper_metadata = {}
+        
+        for doc in all_docs:
+            metadata = doc.get("metadata", {})
+            if metadata.get("paper_id") == paper_id:
+                paper_chunks.append({
+                    "chunk_id": doc.get("id"),
+                    "content": doc.get("document", ""),
+                    "type": metadata.get("type", "text"),
+                    "page": metadata.get("page", "N/A")
+                })
+                
+                # Store paper metadata (title, etc.)
+                if not paper_metadata:
+                    paper_metadata = {
+                        "paper_id": paper_id,
+                        "title": metadata.get("title", "Unknown Title"),
+                    }
+        
+        if not paper_chunks:
+            raise HTTPException(status_code=404, detail=f"Paper {paper_id} not found")
+        
+        return {
+            "success": True,
+            "paper": paper_metadata,
+            "chunks": paper_chunks,
+            "total_chunks": len(paper_chunks)
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting paper details: {e}")
+        raise HTTPException(status_code=500, detail=f"Error retrieving paper: {str(e)}")
+
 # Query Endpoints
 @app.post("/api/query/text", response_model=QueryResponse)
 async def query_text(request: QueryRequest):

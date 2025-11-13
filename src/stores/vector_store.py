@@ -40,9 +40,6 @@ def get_collection():
 def upsert_chunks(chunks):
     """
     Embeds chunks and upserts them into the ChromaDB collection.
-
-    Args:
-        chunks (list): List of DocumentChunk objects to be embedded and upserted.
     """
     if not chunks:
         logger.warning("No chunks provided to upsert. Skipping.")
@@ -80,13 +77,6 @@ def upsert_chunks(chunks):
 def query_collection(query_text: str, n_results: int = 10):
     """
     Query the collection with a text query.
-    
-    Args:
-        query_text (str): The query text.
-        n_results (int): Number of results to return.
-    
-    Returns:
-        dict: Query results from ChromaDB.
     """
     collection = get_collection()
     query_embedding = embed_text(query_text)
@@ -103,9 +93,6 @@ def get_all_documents():
     """
     Retrieve all documents from the collection.
     Useful for BM25 indexing.
-    
-    Returns:
-        list: All documents in the collection.
     """
     collection = get_collection()
     
