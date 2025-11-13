@@ -54,22 +54,18 @@
 
 ### 1. 🤖 Intelligent RAG System
 
+<div align='center'>
 <table>
 <tr>
-<td width="50%">
+<td width="25%">
 
 #### Smart Query Routing
 - **Technology**: LangGraph State Machine
 - **Model**: Meta Llama 3.3 70B Instruct
-- **Routing Categories**:
-  - Simple Q&A
-  - Summarization
-  - Comparison Analysis
-  - Deep Analysis
-  - Fact Checking
+- **Routing Categories**: Simple Q&A, Summarization, Comparison Analysis, Deep Analysis, Fact Checking
 
 </td>
-<td width="50%">
+<td width="25%">
 
 #### Hybrid Retrieval
 - **Vector Search**: ChromaDB with cosine similarity
@@ -81,16 +77,18 @@
 </td>
 </tr>
 </table>
+</div>
 
 ### 2. 🎤 Voice Assistant
 
+<div align='center'>
 <table>
 <tr>
 <td width="50%">
 
 #### Speech-to-Text
 - **Engine**: OpenAI Whisper
-- **Model**: Base (upgradable to medium/large)
+- **Model**: Base
 - **Languages**: Multi-language support
 - **Accuracy**: ~95% for clear speech
 - **Latency**: 2-5 seconds per query
@@ -108,6 +106,7 @@
 </td>
 </tr>
 </table>
+</div>
 
 **Complete Voice Workflow:**
 ```
@@ -120,22 +119,17 @@ Audio Input → Whisper Transcription → LLM Processing → Response Generation
 - **Parser**: Unstructured.io
 - **Chunking Strategy**: Recursive character splitting
 - **Chunk Size**: 3000 characters with 100-char overlap
-- **Content Types**: Text, figures, tables, code snippets
+- **Content Types**: Text, figures, tables
 
 #### Visual Analysis
 - **Image Captioning**: Salesforce BLIP
 - **Model**: blip-image-captioning-large
-- **Capabilities**:
-  - Figure description generation
-  - Chart and graph analysis
-  - Diagram interpretation
-  - Visual context extraction
+- **Capabilities**: Figure description generation, chart and graph analysis, Diagram interpretation, Visual context extraction
 
 #### Text Summarization
 - **Model**: Facebook BART-Large-CNN
 - **Strategy**: Hierarchical summarization
-- **Max Length**: 130 tokens
-- **Min Length**: 30 tokens
+- **Max length**: 130 tokens and **min length**: 30 tokens
 - **Approach**: Chunk-level → Document-level
 
 ### 4. 📊 Real-time Monitoring & Analytics
