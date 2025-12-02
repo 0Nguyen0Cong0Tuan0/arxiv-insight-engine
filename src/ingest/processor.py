@@ -44,20 +44,26 @@ def process_pdf(pdf_path: str, paper_id: str):
 
             if category in TEXT_CATEGORIES:
                 chunks.append(DocumentChunk(
-                    paper_id=paper_id, chunk_id=chunk_id, type=TEXT_CATEGORIES.TextCategory.TEXT,
+                    paper_id=paper_id, 
+                    chunk_id=chunk_id, 
+                    type=TextCategory.TEXT,
                     content=getattr(elem, "text", ""), 
                 ))
             
             elif category == "Table":
                 chunks.append(DocumentChunk(
-                    paper_id=paper_id, chunk_id=chunk_id, type=TEXT_CATEGORIES.TextCategory.TEXT,
+                    paper_id=paper_id, 
+                    chunk_id=chunk_id, 
+                    type=TextCategory.TEXT,
                     content=getattr(elem, "text", ""), 
                     metadata={"html": getattr(elem.metadata, "text_as_html", "") or ""}
                 ))
 
             elif category == "Image":
                 chunks.append(DocumentChunk(
-                    paper_id=paper_id, chunk_id=chunk_id, type=TEXT_CATEGORIES.TextCategory.FIGURE,
+                    paper_id=paper_id, 
+                    chunk_id=chunk_id, 
+                    type=TextCategory.FIGURE,
                     content=getattr(elem.metadata, "image_base64", ""),
                 ))
     

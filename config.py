@@ -90,3 +90,4 @@ class TextCategory(str, Enum):
     FIGURECAPTION = "FigureCaption"
     FORMULA = "Formula"
     CODESNIPPET = "CodeSnippet"
+    FIGURE = "Figure"

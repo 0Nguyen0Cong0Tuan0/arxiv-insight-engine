@@ -23,7 +23,7 @@ from src.ingest.pipeline import process_single_pdf
 from src.ingest.loader.arxiv_loader import search_arxiv_papers, download_single_arxiv_paper
 from src.agents.graph import app as agent_app
 from src.agents.tools.image_captioner import ImageCaptioner
-from src.stores.vector_store import init_collection, get_collection
+from src.stores.vector_store import init_collection, get_collection, get_all_documents
 from src.models.request import ArxivSearchRequest, IngestPapersRequest, QueryRequest, QueryResponse
 
 # Import voice and monitoring components
@@ -253,8 +253,6 @@ async def ingest_arxiv_papers(request: IngestPapersRequest):
 async def list_papers():
     """Get all papers and their chunks from the database"""
     try:
-        from src.stores.vector_store import get_all_documents
-        
         all_docs = get_all_documents()
         
         # Group chunks by paper_id
@@ -299,8 +297,6 @@ async def list_papers():
 async def delete_papers(paper_ids: List[str]):
     """Delete selected papers and all their chunks"""
     try:
-        from src.stores.vector_store import get_collection, get_all_documents
-        
         collection = get_collection()
         all_docs = get_all_documents()
         
