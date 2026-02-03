@@ -41,49 +41,24 @@ class EnsembleRetriever:
         )
 
         # BM25 retriever
-        if corpus is None:
-            print(f"Fetching all documents from ChromaDB for BM25 index...")
-            
-            # Get all documents from ChromaDB
-            collection = chroma_client.get_collection(name=settings.VECTOR_COLLECTION)
-            
-            # Fetch documents in batches
-            all_docs = []
-            offset = 0
-            limit = 1000
-            
-            while True:
-                results = collection.get(
-                    limit=limit,
-                    offset=offset,
-                    include=["documents"]
-                )
-                
-                if not results["ids"]:
-                    break
-                
-                all_docs.extend(results["documents"])
-                offset += limit
-                
-                if len(results["ids"]) < limit:
-                    break
-            
-            bm25_texts = [doc for doc in all_docs if doc and doc.strip()]
-        else:
+        if corpus:
             bm25_texts = [text for text in corpus if text and text.strip()]
+            
+            if bm25_texts:
+                print(f"Initializing BM25Retriever with {len(bm25_texts)} provided documents.")
+                bm25 = BM25Retriever.from_texts(bm25_texts)
+                bm25.k = 5
+                
+                return EnsembleRetriever(
+                    retrievers=[vector_retriever, bm25],
+                    weights=[0.7, 0.3]
+                )
 
-        if not bm25_texts:
-            print("Warning: No valid text for BM25. Falling back to vector retriever only.")
-            return EnsembleRetriever(retrievers=[vector_retriever], weights=[1.0])
-
-        print(f"Initializing BM25Retriever with {len(bm25_texts)} documents.")
-        bm25 = BM25Retriever.from_texts(bm25_texts)
-        bm25.k = 5
-
-        return EnsembleRetriever(
-            retrievers=[vector_retriever, bm25],
-            weights=[0.7, 0.3]
-        )
+        # LOGIC FIX 2: Prevent O(N) memory crash!
+        # If no corpus provided, do NOT fetch all docs from DB. 
+        # Just use Vector Search. In production, use a persistent text index (like Elastic).
+        print("No corpus provided for BM25. Using Vector Search ONLY to save memory.")
+        return EnsembleRetriever(retrievers=[vector_retriever], weights=[1.0])
 
     def retrieve(self, query: str, k: int = 10) -> List[Document]:
         """

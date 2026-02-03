@@ -37,7 +37,7 @@ def get_collection():
     """
     return chroma_client.get_collection(name=settings.VECTOR_COLLECTION)
 
-def upsert_chunks(chunks):
+async def upsert_chunks(chunks):
     """
     Embeds chunks and upserts them into the ChromaDB collection.
     """
@@ -54,17 +54,35 @@ def upsert_chunks(chunks):
     metadatas = []
     
     for chunk in chunks:
-        text = chunk.content or ""
-        vector = embed_text(text)
+        text_to_embed = ""
+        
+        # Don't embed Base64 images!
+        if chunk.type == "figure" or len(chunk.content) > 5000:
+            caption = chunk.metadata.get("caption", "")
+            if caption:
+                text_to_embed = caption
+            else:
+                logger.debug(f"Skipping embedding for image/large chunk {chunk.chunk_id}")
+                text_to_embed = "figure" 
+        else:
+            text_to_embed = chunk.content or ""
+            
+        if not text_to_embed.strip():
+            continue
+
+        # await the async embedding function
+        vector = await embed_text(text_to_embed)
         payload, _ = chunk.to_qdrant_payload(vector)
         
-        # ChromaDB requires string IDs
         ids.append(chunk.chunk_id)
         embeddings.append(vector)
-        documents.append(text)
+        documents.append(chunk.content or "")
         metadatas.append(payload)
     
-    # Upsert to ChromaDB (handles both insert and update)
+    if not ids:
+        logger.warning("No valid chunks to upsert after filtering.")
+        return
+
     collection.upsert(
         ids=ids,
         embeddings=embeddings,
@@ -72,14 +90,14 @@ def upsert_chunks(chunks):
         metadatas=metadatas
     )
     
-    logger.info(f"Upserted {len(chunks)} chunks to ChromaDB.")
+    logger.info(f"Upserted {len(ids)} chunks to ChromaDB.")
 
-def query_collection(query_text: str, n_results: int = 10):
+async def query_collection(query_text: str, n_results: int = 10):
     """
     Query the collection with a text query.
     """
     collection = get_collection()
-    query_embedding = embed_text(query_text)
+    query_embedding = await embed_text(query_text)
     
     results = collection.query(
         query_embeddings=[query_embedding],

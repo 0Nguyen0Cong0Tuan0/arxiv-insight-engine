@@ -25,13 +25,15 @@ async def process_single_pdf(pdf_path: str, paper_id: str) -> int:
     
     if chunks:
         logger.info(f"Upserting {len(chunks)} chunks...")
-        upsert_chunks(chunks)
+        await upsert_chunks(chunks)
         return len(chunks)
     else:
         logger.warning(f"No chunks extracted from {paper_id}")
         return 0
 
-def run_pipeline():
+import asyncio
+
+async def run_pipeline():
     logger.info("Starting pipeline...")
 
     pdf_paths = download_arxiv_papers(
@@ -44,13 +46,18 @@ def run_pipeline():
     for pdf_path in pdf_paths:
         paper_id = Path(pdf_path).stem
         logger.info(f"Processing {paper_id}")
+        # process_pdf is synchronous (CPU bound), keep it that way for now or offload?
+        # It's CPU bound but we can leave it sync here as this is a background script.
         chunks = process_pdf(pdf_path, paper_id)
         all_chunks.extend(chunks)
 
     if all_chunks:
         logger.info(f"Upserting {len(all_chunks)} chunks...")
-        upsert_chunks(all_chunks)
+        await upsert_chunks(all_chunks)
     else:
         logger.warning("No chunks were extracted from the PDFs. Nothing to upsert.")
         
     logger.info("Pipeline complete!")
+
+if __name__ == "__main__":
+    asyncio.run(run_pipeline())
